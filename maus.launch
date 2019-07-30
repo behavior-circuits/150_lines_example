@@ -1,0 +1,4 @@
+<launch>
+  <node name="vision" type="vision.py" pkg="maus" />
+  <node name="cheese_home" type="cheese_home.py" pkg="maus" />
+</launch>
