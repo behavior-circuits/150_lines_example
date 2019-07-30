@@ -1,9 +1,9 @@
 #!/usr/bin/env python
+import sys
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import Point
 import rospy
 
-pub = rospy.Publisher('/RosAria/cmd_vel', Twist, queue_size=1)
 
 def cat_avo(msg):
 	output = Twist()
@@ -15,7 +15,8 @@ def cat_avo(msg):
 if __name__ == '__main__':
 	try:
 		rospy.init_node("cat_avo")
-		cat_sub = rospy.Subscriber('/catpose', Point, cat_avo)
+                pub     = rospy.Publisher(sys.argv[1], Twist, queue_size=1)
+		cat_sub = rospy.Subscriber(sys.argv[0], Point, cat_avo)
 		rospy.spin()
 	except rospy.ROSInterruptException:
-		rospy.loginfo("---------- ERROR! ---------")
+		rospy.loginfo("cat avoidance not working")
