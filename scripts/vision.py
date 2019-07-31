@@ -11,11 +11,9 @@ import numpy as np
 focal_len        = 750
 min_size         = 0
 max_height       = 200
-print(sys.argv[0])
 height_of_object = float(sys.argv[2])
 lower_bound      = np.array([int(sys.argv[3]),int(sys.argv[4]),int(sys.argv[5])])
 upper_bound      = np.array([int(sys.argv[6]),int(sys.argv[7]),int(sys.argv[8])])
-print(lower_bound, upper_bound)
 memory           = int(sys.argv[9])
 global last_cheese
 last_cheese      = 0
@@ -38,7 +36,6 @@ def img_call(ros_img):
 		if cv2.contourArea(biggest_contour) >= min_size:
 			x,y,w,h         = cv2.boundingRect(biggest_contour[0])
 			bounding_center     = np.array([x+w/2,y+h/2])
-			output              = Point()
 			output.y            = -1*np.arctan((bounding_center[0]-image_w/2.0)/focal_len)
 			output.x            = height_of_object*focal_len/(h*np.cos(output.y))
 			last_cheese         = output.y
@@ -49,7 +46,7 @@ if __name__ == '__main__':
 	try:
 		rospy.init_node("vision")
                 bridge       = CvBridge()
-		cam_info_sub = rospy.Subscriber('/usb_cam/image_raw',Image,img_call)
+		cam_sub      = rospy.Subscriber('/usb_cam/image_raw',Image,img_call)
                 pubCheese    = rospy.Publisher(sys.argv[1], Point, queue_size=1)
 		rospy.spin()
 	except rospy.ROSInterruptException:
