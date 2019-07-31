@@ -4,12 +4,5 @@
   <node name="blue_hideout_detection" type="vision.py" pkg="maus" args="blue_position 0.66 80 30 100 120 255 255 0" />
   <node name="orange_hideout_detection" type="vision.py" pkg="maus" args="orange_position 0.66 20 50 120 25 120 255 0" />
   <node name="obstacle_detection" type="sonar.py" pkg="maus"  />
-
-  <node name="cheese_homing" type="homing.py" pkg="maus" args="cheese_position cheese_homing 0.3"/>
-  <node name="blue_hideout_homing" type="homing.py" pkg="maus" args="blue_position blue_homing 0.3"/>
-  <node name="orange_hideout_homing" type="homing.py" pkg="maus" args="orange_position orange_homing 0.3"/>
-
-
-  <node name="cat_avoidance" type="avoidance.py" pkg="maus" args="cat_position cat_avoidance" />
-  <node name="collision_avoidance" type="avoidance.py" pkg="maus" args="obstacle_position /RosAria/cmd_vel" />
+  <node name="fusion" type="fusion.py" pkg="maus" args="cat_position blue_position orange_position cheese_position obstacle_position /RosAria/cmd_vel" /> 
 </launch>

@@ -27,11 +27,11 @@ class Sonar:
         for i in range(0, len(sonar_angles)):
             sonar_ranges[i]=np.sqrt(sonar_points[i].x**2+sonar_points[i].y**2)/(1+np.exp(-1*(self.hideout[0])))
         minimum  = np.argmin(sonar_ranges)
+        output   = Point()
         if sonar_ranges[minimum] <= max_distance:
-            output   = Point()
             output.x = sonar_ranges[minimum]*weight[minimum]
             output.y = -sonar_angles[minimum]
-            pub.publish(output)
+        pub.publish(output)
 if __name__== '__main__':
     rospy.init_node("obstacle_detection")
     try:
