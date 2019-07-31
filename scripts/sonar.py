@@ -25,7 +25,7 @@ class Sonar:
         sonar_points = data.points
         sonar_ranges = np.zeros(len(sonar_angles))
         for i in range(0, len(sonar_angles)):
-            sonar_ranges[i]=np.sqrt(sonar_points[i].x**2+sonar_points[i].y**2)/(1+np.exp(-1*(self.hideout[0])))
+            sonar_ranges[i]=np.sqrt(sonar_points[i].x**2+sonar_points[i].y**2)*2*(1/(1+np.exp(-1*(self.hideout[0])))-0.5)
         minimum  = np.argmin(sonar_ranges)
         output   = Point()
         if sonar_ranges[minimum] <= max_distance:
