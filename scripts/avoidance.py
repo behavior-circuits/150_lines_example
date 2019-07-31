@@ -15,8 +15,8 @@ def cat_avo(msg):
 if __name__ == '__main__':
 	try:
 		rospy.init_node("cat_avo")
-                pub     = rospy.Publisher(sys.argv[1], Twist, queue_size=1)
-		cat_sub = rospy.Subscriber(sys.argv[0], Point, cat_avo)
+                pub     = rospy.Publisher(sys.argv[2], Twist, queue_size=1)
+		cat_sub = rospy.Subscriber(sys.argv[1], Point, cat_avo)
 		rospy.spin()
 	except rospy.ROSInterruptException:
 		rospy.loginfo("cat avoidance not working")

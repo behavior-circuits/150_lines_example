@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import numpy as np
 import rospy
 from sensor_msgs.msg import PointCloud
@@ -14,7 +13,7 @@ def sonar_callback(data):
     sonar_points = data.points
     sonar_ranges = np.zeros(len(sonar_angles))
     for i in range(0, len(sonar_angles)):
-        sonar_ranges[i]=np.sqrt(sonar_points[i].x**2+sonar_points.y**2)
+        sonar_ranges[i]=np.sqrt(sonar_points[i].x**2+sonar_points[i].y**2)
     minimum  = np.argmin(sonar_ranges)
     if sonar_ranges[minimum] <= max_distance:
         output   = Point()
@@ -26,8 +25,9 @@ def sonar_callback(data):
 if __name__=='__main__':
     try:
         rospy.init_node("obstacle_detection")
-        pub       = rospy.Publisher("obstacle",Point,queue_size=1)
+        pub       = rospy.Publisher("obstacle_position",Point,queue_size=1)
         obst_sub  = rospy.Subscriber("/RosAria/sonar",PointCloud,sonar_callback)
+        rospy.spin()
     except rospy.ROSInterruptException: 
         rospy.loginfo("sonar not working")
 
