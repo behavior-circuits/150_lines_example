@@ -16,7 +16,7 @@ height_of_object = float(sys.argv[2])
 lower_bound      = np.array([int(sys.argv[3]),int(sys.argv[4]),int(sys.argv[5])])
 upper_bound      = np.array([int(sys.argv[6]),int(sys.argv[7]),int(sys.argv[8])])
 print(lower_bound, upper_bound)
-memory           = bool(sys.argv[9])
+memory           = int(sys.argv[9])
 global last_cheese
 last_cheese      = 0
 
@@ -29,7 +29,7 @@ def img_call(ros_img):
 	mask                     = cv2.rectangle(mask,(0,0),(len(mask[0]),max_height),(0,100,0),-1)
 	im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 	output                   = Point()
-        if memory == True:
+        if memory == 1:
             output.x                 = 1
             output.y                 = last_cheese
 

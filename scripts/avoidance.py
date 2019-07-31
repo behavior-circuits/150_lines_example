@@ -7,8 +7,9 @@ import rospy
 
 def cat_avo(msg):
 	output = Twist()
-	output.linear.x = 1
-	output.angular.z = -(0.1/(msg.x*msg.y))
+        if msg.x != 0:
+            output.linear.x = 1
+            output.angular.z = -(0.1/(msg.x*msg.y))
 	pub.publish(output)
 
 
