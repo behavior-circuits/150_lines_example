@@ -11,21 +11,21 @@ class Sonar:
     def __init__(self):
         self.hideout = np.zeros(2)
         obst_sub  = rospy.Subscriber("/RosAria/sonar",PointCloud,self.sonar_callback)
-        blue_sub  = rospy.Subscriber("blue_position",Point,self.hideout_callback)
-        orang_sub = rospy.Subscriber("orange_position",Point,self.hideout_callback)
+        blue_sub  = rospy.Subscriber("blue_position",Point,self.hideout_callback,0)
+        orang_sub = rospy.Subscriber("orange_position",Point,self.hideout_callback,1)
         while not rospy.is_shutdown():
             print("still working")
-    def hideout_callback(self,data):
+    def hideout_callback(self,data,i):
         if data.x != 0:
-            self.hideout = np.array([data.x,data.y])
+            self.hideout[i] = data.x
         else:
-            self.hideout = np.array([100000,data.y])
+            self.hideout[i] = 100000
     def sonar_callback(self,data):
         pub       = rospy.Publisher("obstacle_position",Point,queue_size=1)
         sonar_points = data.points
         sonar_ranges = np.zeros(len(sonar_angles))
         for i in range(0, len(sonar_angles)):
-            sonar_ranges[i]=np.sqrt(sonar_points[i].x**2+sonar_points[i].y**2)*2*(1/(1+np.exp(-1*(self.hideout[0])))-0.5)
+            sonar_ranges[i]=np.sqrt(sonar_points[i].x**2+sonar_points[i].y**2)*2*(1/(1+np.exp(-1*(min(self.hideout))))-0.5)
         minimum  = np.argmin(sonar_ranges)
         output   = Point()
         if sonar_ranges[minimum] <= max_distance:
