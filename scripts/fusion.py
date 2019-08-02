@@ -7,51 +7,28 @@ from geometry_msgs.msg import Point
 
 class Fusion:
 	def __init__(self):
-		self.cat       = [0,0]
-		self.blue      = [0,0]
-		self.orange    = [0,0]
-		self.cheese    = [0,0]
-		self.collision = [0,0]
+                # array containes cat,blue,orange,cheese,collision
+                self.behaviors = np.zeros((5,2))
+                parameters     =  np.array([[-0.1,-1,-1],[0.3,0,1],[0,0,1],[0.8,0,1],[-0.5,-1,-1]])
+                for i in range(1,5):
+                    rospy.Subscriber(sys.argv[i], Point, self.generate_behavior,(i,parameters[i,0],parameters[i,1],parameters[i,2]))
 		self.pub                     = rospy.Publisher('/RosAria/cmd_vel', Twist, queue_size=1)
-		self.cat_avoidance_sub       = rospy.Subscriber(sys.argv[1], Point, self.store_cat)
-		self.blue_homing_sub         = rospy.Subscriber(sys.argv[2], Point, self.store_blue)
-		self.orange_homing_sub       = rospy.Subscriber(sys.argv[3], Point, self.store_orange)
-		self.cheese_homing_sub       = rospy.Subscriber(sys.argv[4], Point, self.store_cheese)
-		self.collision_avoidance_sub = rospy.Subscriber(sys.argv[5], Point, self.store_collision)
 		while not rospy.is_shutdown():
 			self.fusion()
 
+        def generate_behavior(self,msg,args):
+                if msg.x != 0 and msg.y != 0 :
+                    self.behaviors[args[0]] = np.array([1,args[1]*msg.x**args[2]*msg.y**args[3]])
+                else:
+                    self.behaviors[args[0]] = np.array([1,0])
 
-	def store_cat(self,msg):
-		self.cat       = move(msg,-0.1,-1,-1)
-	def store_blue(self,msg):
-		self.blue      = move(msg,0.3,0,1)
-	def store_orange(self,msg):
-		self.orange    = move(msg,0.3,0,1)
-	def store_cheese(self,msg):
-		self.cheese    = move(msg,0.3,0,1)
-	def store_collision(self,msg):
-		self.collision = move(msg,-0.1,-1,-1)
-
-		
 	def fusion(self):
 		#print('collision', self.collision, 'cheese', self.cheese)
-		#rospy.loginfo(self.cat)
 		cmd_vel = Twist()
 		cmd_vel.linear.x = 1
-		#cmd_vel.angular.z = invoke_gate(self.cat[1] , self.orange[1] )
-		cmd_vel.angular.z = invoke_gate( cmd_vel.angular.z, self.cat[1] )
-		cmd_vel.angular.z = or_gate(cmd_vel.angular.z, self.cheese[1])
-		cmd_vel.angular.z = prevail_gate(cmd_vel.angular.z, self.collision[1])
+                cmd_vel.angular.z = prevail_gate(or_gate(invoke_gate(self.behaviors[0,1],self.behaviors[2,1]),self.behaviors[3,1]),self.behaviors[4,1])
+                print(cmd_vel)
 		self.pub.publish(cmd_vel)
-		
-
-def move(msg,c1,c2,c3):
-	if msg.x != 0 and msg.y != 0 :
-	    return np.array([1,c1*msg.x**c2*msg.y**c3])
-        else:
-            return np.array([1,0])
-
 
 	
 def and_gate(x, y):

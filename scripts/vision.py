@@ -8,8 +8,8 @@ from cv_bridge import CvBridge
 import numpy as np
 
 
-focal_len        = 750
-min_size         = 0
+focal_len        = 500
+min_size         = 600
 max_height       = 200
 global last_cheese
 last_cheese      = 0
