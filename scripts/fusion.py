@@ -27,33 +27,33 @@ class Fusion:
 		#print('collision', self.collision, 'cheese', self.cheese)
 		cmd_vel = Twist()
 		cmd_vel.linear.x = 1
-                cmd_vel.angular.z = prevail_gate(or_gate(invoke_gate(self.behaviors[2,1],self.behaviors[0,1]),self.behaviors[3,1]),self.behaviors[4,1])
+                cmd_vel.angular.z = PREVAIL(OR(INVOKE(self.behaviors[2,1],self.behaviors[0,1]),self.behaviors[3,1]),self.behaviors[4,1])
                 #cmd_vel.angular.z = self.behaviors[1,1]
                 print(self.behaviors)
 		self.pub.publish(cmd_vel)
 
-	
-def and_gate(x, y):
-        a = 2.28466
-        b = -0.89817
-        if x == 0 and y == 0:
-            return 0
-        else:
-            return x*(1-np.exp(-((a*y**2+b*x*y)/(x**2+y**2))))+ y*(np.exp(-((a*x**2+b*x*y)/(x**2+y**2))))
 
-def or_gate(x, y):
-        a = 1.02889
-        b = 0.3574
-        if x == 0 and y == 0:
-            return 0
-        else:
-            return x*(np.exp(-((a*y**2+b*x*y)/(x**2+y**2)))) + y*(np.exp(-((a*x**2+b*x*y)/(x**2+y**2))))
 
-def invoke_gate(x, y):
-        return and_gate(or_gate(x, y),x)
 
-def prevail_gate(x, y):
-        return or_gate(x, or_gate(x, y))
+def OR(x,y):
+    return  x+y-x*y*np.tanh(x+y)/np.tanh(2)
+
+
+def AND(x,y):
+    return x*y*np.tanh(x+y)/np.tanh(2)
+    
+    
+def COMPARE(x,y):
+    return OR(x,-y)
+    
+    
+def INVOKE(x,y):
+    return AND(x,OR(x,y))
+    
+    
+def PREVAIL(x,y):
+    return OR(x,OR(x, y))
+
 
 if __name__ == '__main__':
 	try:
