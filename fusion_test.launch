@@ -1,7 +1,0 @@
-<launch>
-  <node name="cheese_detection" type="vision.py" pkg="maus" args="cheese_position 0.1 60 60 0 80 255 100 1" />
-  <node name="cat_detection" type="vision.py" pkg="maus" args="cat_position 0.18 0 120 30 22 255 125 0" />
-  <node name="blue_hideout_detection" type="vision.py" pkg="maus" args="blue_position 0.66 80 30 100 120 255 255 0" />
-  <node name="orange_hideout_detection" type="vision.py" pkg="maus" args="orange_position 0.66 20 50 120 25 120 255 0" />
-  <node name="obstacle_detection" type="sonar.py" pkg="maus"  />
-</launch>
