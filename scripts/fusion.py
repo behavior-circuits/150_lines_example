@@ -39,14 +39,8 @@ def sigmoid(x,steepness,midpoint):
 def OR(x,y):
     return  x+y-x*y*np.tanh(x+y)/np.tanh(2)
 
-
 def AND(x,y):
     return x*y*np.tanh(x+y)/np.tanh(2)
-    
-    
-def COMPARE(x,y):
-    return OR(x,-y)
-    
     
 def INVOKE(x,y):
     return AND(x,OR(x,y))
@@ -54,7 +48,6 @@ def INVOKE(x,y):
     
 def PREVAIL(x,y):
     return OR(x,OR(x, y))
-
 
 if __name__ == '__main__':
 	try:
