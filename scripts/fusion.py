@@ -22,7 +22,7 @@ class Fusion:
 
     def generate_behavior(self, msg, args):
         if msg.x != 0 and msg.y != 0:
-            self.behaviors[args[0]] = bc.and(
+            self.behaviors[args[0]] = bc.AND(
                 bc.sigmoid(msg.x**args[2], args[1], 0), bc.sigmoid(msg.y**args[4], args[3]))
         else:
             self.behaviors[args[0]] = 0
@@ -30,7 +30,7 @@ class Fusion:
     def fusion(self):
         cmd_vel = Twist()
         cmd_vel.linear.x = 1
-        cmd_vel.angular.z = bc.prevail(bc.or(bc.invoke(
+        cmd_vel.angular.z = bc.PREVAIL(bc.OR(bc.INVOKE(
             self.behaviors[2], self.behaviors[0]), self.behaviors[3]), self.behaviors[4])
         self.pub.publish(cmd_vel)
 
